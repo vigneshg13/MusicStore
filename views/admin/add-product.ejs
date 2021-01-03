@@ -1,0 +1,54 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+   <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <div>
+            <% if(errorMessage) { %>
+                <h1 class="user-message user-message--error"><%=errorMessage%></h1>
+            <% } %>
+            <% if(!isAdmin){ %>
+                <h1 class="user-message user-message--error">You are not authorized to add or adminstrate the music.</h1>
+            <% } %>
+        </div>
+        <% if(isAdmin) { %>
+            <form class="product-form" action="/admin/<% if(editing) {%>edit-product<%} else { %>add-product <%}%>" method="POST" enctype="multipart/form-data">
+                <div class="form-control">
+                    <label for="track">Track Name</label>
+                    <input type="text" name="track" id="track" value = "<% if(editing) {%> <%=product.track%> <%}%>" >
+                </div>
+                <div class="form-control">
+                    <label for="artist">Artist Name</label>
+                    <input type="text" name="artist" id="artist" value = "<% if(editing) {%> <%=product.artist%> <%}%>" >
+                </div>
+                <div class="form-control">
+                    <label for="image">Track Image</label>
+                    <input type="file" name="image" id="image" >
+                </div>
+                <div class="form-control">
+                    <label for="price">Price</label>
+                    <input type="number" name="price" id="price" value = <% if(editing) {%> <%=product.price%> <%}%> step="0.01" >
+                </div>
+                <div class="form-control">
+                    <label for="album">Album</label>
+                    <input type="text" name="album" id="album" value = "<% if(editing) {%> <%=product.album%> <%}%>" >
+                </div>
+                <div class="form-control">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="5"><% if(editing) {%> <%=product.description%> <%}%></textarea>
+                </div>
+                <% if(editing) {%>
+                   <input type="hidden" value="<%=product._id%>" name = "prodId">
+                <% } %>
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>"> 
+                <button class="btn" type="submit"><% if(editing) {%> Update Product <%} else { %> Add Product <% } %></button>
+                
+            </form>
+       <% } %>
+        
+    </main>
+<%- include('../includes/end.ejs') %>
